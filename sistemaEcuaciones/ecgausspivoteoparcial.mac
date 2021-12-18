@@ -1,0 +1,76 @@
+/* [wxMaxima: input   start ] */
+gauss(N,Ma):=block([MA,i,b,m,X,val],
+MA:Ma,
+i:1,
+for k from 2 thru N step 1 do
+    (    
+        if(MA[i,1]<MA[k,1])then
+        (
+            i:k
+        )
+    ),
+    print("la matriz introducida es"),
+    print(MA),
+MA:addrow(MA,row(MA,i)),
+for k from 1 thru N step 1 do
+    (    
+        if(k#i)then
+        (
+            MA:addrow(MA,row(MA,k))
+        )
+    ),
+    for k from 1 thru N step 1 do
+    (    
+        MA:submatrix(1,MA)
+    ),
+    print("la matriz reordenada"),
+    print(MA),
+    
+    /*Triangulamos*/
+    for j from 1 thru N-1 step 1 do
+    (
+        for k from j+1 thru N step 1 do
+        (
+            m:MA[k,j]/MA[j,j],
+            for h from j thru N+1 step 1 do
+            (
+                MA[k,h]:MA[k,h]-m*MA[j,h]
+            )
+        )
+    ),
+    print("La matiz triangular:"),
+    print(MA),
+    /*comprobamos soluciones finitas*/
+    i:0,
+    for k from 1 thru N step 1 do
+    (
+        if(MA[k,k]=0)then
+        (
+        i:i+1
+        )
+    ),
+    /*Sustitucion hacia atras*/
+    X:makelist(0, k, 1, N),
+    if(i=0)then
+    (
+        X[N]:MA[N,N+1]/MA[N,N],
+        for k from N-1 thru 1 step -1 do
+         (
+            val:0,
+            for h from 1 thru N step 1 do
+            (
+                if(MA[k,h]#0)then
+                (
+                val:val+MA[k,h]*X[h]
+                )
+                
+            ),
+            X[k]:(MA[k,N+1]-val)/MA[k,k]
+        )
+        ),
+return(X)    
+)$
+/* [wxMaxima: input   end   ] */
+
+
+

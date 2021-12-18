@@ -1,0 +1,45 @@
+/* [wxMaxima: input   start ] */
+/*Input
+f:funcion de x que queremos obtener la raiz 
+p0: punto de partida, primera aproximación
+tol: tolerancia
+N: numero maximo de iteraciones
+El programa imprime en pantalla
+numero de iteracion     valor de la aproximacion        f(aproximacion)
+*/
+newton(f,p0,tol,N):=block([i, p, P0, df],
+numer:true,
+i:1,
+fp:diff(f,x),
+P0:p0,
+p:p0,
+bandera:0,
+print("n=0","   P_n=",P0,"  f(P_n)=",subst(0,x,f)),    
+
+while(i<=N and bandera=0)do
+    (
+        p:P0-(subst(P0,x,f))/(subst(P0,x,fp)),
+        i:i+1,
+        print("n=",i,"   P_i=",p,"  f(p)=",subst(p,x,f)),
+        if(abs(p-P0)<tol)then
+        (
+            bandera:1,
+            print("Se ha llegado a la tolerancia en la iteración ", i ),
+            print("p=", p)
+        )
+        else
+        (
+            P0:p
+        )
+    ),
+    
+    if(bandera=0)then
+    (
+        print("El método falló despues de ",i, " iteraciones.")
+    )
+    
+)$
+/* [wxMaxima: input   end   ] */
+
+
+
