@@ -1,0 +1,49 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 22.04.0 ] */
+/* [wxMaxima: input   start ] */
+/*  input:
+    f: funcion para la que queremos obtener la raiz
+    P0: primera aproximación
+    tol: valor para la tolerancia
+    N:numero maximo de iteraciones
+    output:
+    numero iteracion        aproximacion n          f(p_n)
+
+    El método de Steffensen es aplicar el método de aitken
+    al método del punto fijo a partir de la tercera iteracion. 
+    Continuando con el método del punto fijo hasta obtener dos nuevas
+    iteraciones para volver a usar el método de Aitken */
+steffensen(f,P0,tol,N):=block(
+    [i,p0,p1,p2,p,bandera],
+    i:1,
+    p0:P0,
+    bandera:0,
+    print("n=0","   P_n=",P0,"  f(P_n)",subst(p0,x,f)),
+    /* mientras no alcance el máximo de iteraciones ni haya llegado a la tolerancia */
+    while (i<=N and bandera=0) do (
+        p1:subst(p0,x,f),
+        p2:subst(p1,x,f),
+        /* Aitken */
+        p:p0-(p1-p0)^2/(p2-2*p1+p0),
+        /* imprimo en pantalla */
+        print("n=",i,"   P_n=",p,"  f(P_n)=",subst(p,x,f)),
+        /* si alcanzamos la tolerancia */
+        if (abs(p-p0)<tol) then (
+            bandera:1,
+            print("Procedimiento completado exitosamente tras ",i," iteraciones."),
+            print("Aproximación=",p)
+        ),
+        i:i+1,
+        p0:p
+    ),
+    /* si no encuentra la solucion */
+    if (bandera=0) then (
+        print("El método falló despues de ",i, " iteraciones.")
+    )
+)$
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 22.04.0"$
