@@ -1,0 +1,43 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 22.04.0 ] */
+/* [wxMaxima: input   start ] */
+/* Programa para sacar las soluciones en un sistema factorizado Ax=LUx=b
+    con:
+            Ly=b
+            Ux=y
+    No tiene en cuenta que matriz triangular tiene la diagonal con 1 por lo que
+    el coste computacional es un poco mayor que si se hubiese hecho para 
+    cada situación concreta.
+    
+    INPUT:
+    L:matriz inferior
+    U:matriz superior
+    b: lista con los coeficientes
+    OUTPUT:
+    imprime la lista y
+    imprime la lista x */
+solucionLU(L,U,b):=block(
+    [y],
+    N:length(b),
+    x:makelist(0,i,1,N),
+    y:makelist(0,i,1,N),
+    /*calcularmos los valores de y*/
+    for i from 1 thru N step 1 do (
+        y[i]:(b[i]-sum(L[i,k]*y[k],k,1,i-1))/L[i,i]
+    ),
+    print("El obtenemos el vector y:"),
+    print(y),
+    /*calculamos valores de x*/
+    x[N]:y[N]/U[N,N],
+    for i from N-1 thru 1 step -1 do (
+        x[i]:(y[i]-sum(U[i,k]*x[k],k,i+1,N))/U[i,i]
+    ),
+    print("El vector x generado es:"),
+    print(x)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 22.04.0"$

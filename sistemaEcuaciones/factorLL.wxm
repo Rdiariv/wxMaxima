@@ -1,0 +1,34 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 22.04.0 ] */
+/* [wxMaxima: input   start ] */
+/* Factorización LU de Cholesky
+    INPUT: matriz cuadrada de coeficientes
+    OUTPUT: Vector con la factorización LU */
+factorLL(M):=block(
+    [L,U,N],
+    N:matrix_size(M)[1],
+    L:zeromatrix(N,N),
+    U:zeromatrix(N,N),
+    /*valor de L11*/
+    L[1,1]:sqrt(M[1,1]),
+    /*primera fila de L*/
+    for i from 2 thru N step 1 do (
+        L[i,1]:M[i,1]/L[1,1]
+    ),
+    for i from 2 thru N-1 step 1 do (
+        L[i,i]:sqrt(M[i,i]-sum(L[i,k]^2, k, 1, i-1)), /*calcula la diagonal de L*/
+        for j from i+1 thru N step 1 do (
+            L[j,i]:(M[j,i]-sum(L[j,k]*L[i,k],k,1,i-1))/L[i,i]
+        )
+    ),
+    /*Valor de Lnn*/
+    L[N,N]:sqrt(M[N,N]-sum((L[N,k])^2, k,1,N-1)),
+    U:transpose(L),
+    return([L,U])
+);
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 22.04.0"$
