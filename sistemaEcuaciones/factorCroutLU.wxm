@@ -1,0 +1,40 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 22.04.0 ] */
+/* [wxMaxima: input   start ] */
+/* INPUT:
+    M=matriz cuadrada
+    OUTPUT:
+Matriz con la matriz L y la matriz U como elementos. */
+factorCroutLU(M /*matriz cuadrada*/):=block(
+    [N,L,U],
+    /*Tamaño de la matriz cuadrada y creación de L y U*/
+    N:matrix_size(M)[1],
+    L:zeromatrix(N,N),
+    U:ident(N),
+    /*obtenemos la primera columna de L*/
+    for i from 1 thru N step 1 do (
+        L[i,1]:M[i,1]   /*Primera fila de L sin coste computacional*/
+    ),
+    for i from 1 thru N step 1 do (
+        U[1,i]:M[1,i]/L[1,1]  /*primera columna de U*/
+    ),
+    /*Resto de valores para cada matriz*/
+    for j from 2 thru N step 1 do /*valores de L*/ (
+        for i from 2 thru N step 1 do (
+            L[i,j]:M[i,j]-sum(L[i,k]*U[k,j],k,1,j-1)
+        ),
+        for i from j+1 thru N step 1 do /*valores de U*/ (
+            U[j,i]:(M[j,i]-sum(L[j,k]*U[k,i],k,1,j-1))/L[j,j]
+        )
+    ),
+    /*Imprime resultados*/
+    print("La factorización Crout de la matriz pedida es:"),
+    return([L,U])
+    /*Fin*/
+)$
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 22.04.0"$
